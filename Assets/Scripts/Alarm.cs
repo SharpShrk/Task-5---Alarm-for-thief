@@ -9,8 +9,7 @@ public class Alarm : MonoBehaviour
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
     private float _changeRateVolume = 0.5f;
-    private bool _isClipPlaying = false;
-    private bool _isClipStop = false;
+    private Coroutine _runCorutine;
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -18,14 +17,13 @@ public class Alarm : MonoBehaviour
         {
             _audioSource.Play();
             _audioSource.volume = _minVolume;
-            _isClipPlaying = true;
-            var upVolumeJob = StartCoroutine(TurnUpVolume());
-            
-            if (_audioSource.volume == _maxVolume)
+
+            if (_runCorutine != null)
             {
-                _isClipPlaying = false;
-                StopCoroutine(upVolumeJob);
+                StopCoroutine(_runCorutine);
             }
+
+            _runCorutine = StartCoroutine(TurnUpVolume());            
         }
     }
 
@@ -33,21 +31,23 @@ public class Alarm : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _isClipStop = true;
-            var downVolumeJob = StartCoroutine(TurnDownVolume());
-            
+            if (_runCorutine != null)
+            {
+                StopCoroutine(_runCorutine);
+            }
+
+            _runCorutine = StartCoroutine(TurnDownVolume());
+
             if (_audioSource.volume == _minVolume)
             {
-                StopCoroutine(downVolumeJob);
                 _audioSource.Stop();
-                _isClipStop = false;
             }
         }
     }
 
     private IEnumerator TurnUpVolume()
     {
-        while (_isClipPlaying)
+        while (_audioSource.volume <= _maxVolume)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _changeRateVolume * Time.deltaTime);
             yield return new WaitForEndOfFrame();
@@ -56,7 +56,7 @@ public class Alarm : MonoBehaviour
 
     private IEnumerator TurnDownVolume()
     {
-        while(_isClipStop)
+        while(_audioSource.volume >= _minVolume)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _changeRateVolume * Time.deltaTime);
             yield return new WaitForEndOfFrame();

@@ -19,12 +19,12 @@ public class Alarm : MonoBehaviour
             _audioSource.Play();
             _audioSource.volume = _minVolume;
             _isClipPlaying = true;
-            StopCoroutine(TurnDownVolume());
-            StartCoroutine(TurnUpVolume());
-
+            var upVolumeJob = StartCoroutine(TurnUpVolume());
+            
             if (_audioSource.volume == _maxVolume)
             {
                 _isClipPlaying = false;
+                StopCoroutine(upVolumeJob);
             }
         }
     }
@@ -34,11 +34,11 @@ public class Alarm : MonoBehaviour
         if (collision.TryGetComponent<Player>(out Player player))
         {
             _isClipStop = true;
-            StopCoroutine(TurnUpVolume());
-            StartCoroutine(TurnDownVolume());
-
+            var downVolumeJob = StartCoroutine(TurnDownVolume());
+            
             if (_audioSource.volume == _minVolume)
             {
+                StopCoroutine(downVolumeJob);
                 _audioSource.Stop();
                 _isClipStop = false;
             }

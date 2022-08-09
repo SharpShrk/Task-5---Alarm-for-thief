@@ -8,8 +8,9 @@ public class Alarm : MonoBehaviour
     [SerializeField] private AudioClip _alarmClip;
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
-    private float _changeRateVolume = 0.3f;
+    private float _changeRateVolume = 0.5f;
     private bool _isClipPlaying = false;
+    private bool _isClipStop = false;
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -18,6 +19,13 @@ public class Alarm : MonoBehaviour
             _audioSource.Play();
             _audioSource.volume = _minVolume;
             _isClipPlaying = true;
+            StopCoroutine(TurnDownVolume());
+            StartCoroutine(TurnUpVolume());
+
+            if (_audioSource.volume == _maxVolume)
+            {
+                _isClipPlaying = false;
+            }
         }
     }
 
@@ -25,24 +33,33 @@ public class Alarm : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _isClipPlaying = false;
+            _isClipStop = true;
+            StopCoroutine(TurnUpVolume());
+            StartCoroutine(TurnDownVolume());
 
             if (_audioSource.volume == _minVolume)
             {
                 _audioSource.Stop();
-            }            
+                _isClipStop = false;
+            }
         }
     }
 
-    private void Update()
+    private IEnumerator TurnUpVolume()
     {
-        if (_isClipPlaying)
+        while (_isClipPlaying)
         {
-            _audioSource.volume = Mathf.MoveTowards (_audioSource.volume, _maxVolume, _changeRateVolume * Time.deltaTime);
-        }
-        else
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _changeRateVolume * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }        
+    }
+
+    private IEnumerator TurnDownVolume()
+    {
+        while(_isClipStop)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _changeRateVolume * Time.deltaTime);
-        }
+            yield return new WaitForEndOfFrame();
+        }        
     }
 }

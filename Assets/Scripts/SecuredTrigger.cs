@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Alarm))]
+
 public class SecuredTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject _signaling;

@@ -731,6 +731,7 @@ GameObject:
   - component: {fileID: 1700908436}
   - component: {fileID: 1700908435}
   - component: {fileID: 1700908439}
+  - component: {fileID: 1700908440}
   m_Layer: 0
   m_Name: Secured Territory
   m_TagString: Untagged
@@ -829,4 +830,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2579545ae63f92e47a337ac1b4d3285e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _signaling: {fileID: 0}
+  _signaling: {fileID: 1576444216}
+--- !u!114 &1700908440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700908434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e990babf6b4628447881ad3917c70981, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioSource: {fileID: 0}
+  _alarmClip: {fileID: 0}

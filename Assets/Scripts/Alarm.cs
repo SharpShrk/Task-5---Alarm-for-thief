@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Alarm : MonoBehaviour
@@ -11,37 +10,31 @@ public class Alarm : MonoBehaviour
     private float _changeRateVolume = 0.5f;
     private Coroutine _runCorutine;
 
-    private void OnTriggerEnter(Collider collision)
+    public void UpVolume()
     {
-        if (collision.TryGetComponent<Player>(out Player player))
+        _audioSource.Play();
+        _audioSource.volume = _minVolume;
+
+        if (_runCorutine != null)
         {
-            _audioSource.Play();
-            _audioSource.volume = _minVolume;
-
-            if (_runCorutine != null)
-            {
-                StopCoroutine(_runCorutine);
-            }
-
-            _runCorutine = StartCoroutine(TurnUpVolume());            
+            StopCoroutine(_runCorutine);
         }
+
+        _runCorutine = StartCoroutine(TurnUpVolume());
     }
 
-    private void OnTriggerExit(Collider collision)
+    public void DownVolume()
     {
-        if (collision.TryGetComponent<Player>(out Player player))
+        if (_runCorutine != null)
         {
-            if (_runCorutine != null)
-            {
-                StopCoroutine(_runCorutine);
-            }
+            StopCoroutine(_runCorutine);
+        }
 
-            _runCorutine = StartCoroutine(TurnDownVolume());
+        _runCorutine = StartCoroutine(TurnDownVolume());
 
-            if (_audioSource.volume == _minVolume)
-            {
-                _audioSource.Stop();
-            }
+        if (_audioSource.volume == _minVolume)
+        {
+            _audioSource.Stop();
         }
     }
 

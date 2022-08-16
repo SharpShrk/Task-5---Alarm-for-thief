@@ -1,22 +1,19 @@
 using UnityEngine;
+using System;
 
-[RequireComponent(typeof(Alarm))]
+[RequireComponent(typeof(Player))]
 
 public class SecuredTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject _signaling;
-    private Alarm _alarm;
 
-    private void Start()
-    {
-        _alarm = _signaling.GetComponent<Alarm>();
-    }
+    public static Action EnterTrigger;
+    public static Action ExitTrigger;
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _alarm.UpVolume();
+            EnterTrigger?.Invoke();
         }
     }
 
@@ -24,7 +21,7 @@ public class SecuredTrigger : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            _alarm.DownVolume();
+            ExitTrigger?.Invoke();
         }
     }
 }

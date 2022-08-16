@@ -9,22 +9,33 @@ public class Alarm : MonoBehaviour
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
     private float _changeRateVolume = 0.5f;
+    private Coroutine _volumeChange;
 
     public void UpVolume()
     {
+        if (_volumeChange != null)
+        {
+            StopCoroutine(_volumeChange);
+        }
+        
         _audioSource.Play();
         _audioSource.volume = _minVolume;
 
-        StartCoroutine(ChangeVolume(_maxVolume));
+        _volumeChange = StartCoroutine(ChangeVolume(_maxVolume));
     }
 
     public void DownVolume()
     {
-        StartCoroutine(ChangeVolume(_minVolume));
+        if (_volumeChange != null)
+        {
+            StopCoroutine(_volumeChange);
+        }
+
+        _volumeChange = StartCoroutine(ChangeVolume(_minVolume));
 
         if (_audioSource.volume == _minVolume)
         {
-            _audioSource.Stop();
+            StopCoroutine(_volumeChange);
         }
     }
 
@@ -34,6 +45,18 @@ public class Alarm : MonoBehaviour
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, _changeRateVolume * Time.deltaTime);
             yield return new WaitForEndOfFrame();
-        }        
+        }
+    }
+
+    private void OnEnable()
+    {
+        SecuredTrigger.EnterTrigger += UpVolume;
+        SecuredTrigger.ExitTrigger += DownVolume;
+    }
+
+    private void OnDisable()
+    {
+        SecuredTrigger.EnterTrigger -= UpVolume;
+        SecuredTrigger.ExitTrigger -= DownVolume;
     }
 }

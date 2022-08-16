@@ -5,6 +5,7 @@ public class Alarm : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _alarmClip;
+    [SerializeField] private SecuredTrigger _eventTriggerObject;
 
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
@@ -31,12 +32,7 @@ public class Alarm : MonoBehaviour
             StopCoroutine(_volumeChange);
         }
 
-        _volumeChange = StartCoroutine(ChangeVolume(_minVolume));
-
-        /*if (_audioSource.volume == _minVolume)
-        {
-            StopCoroutine(_volumeChange);
-        }*/
+        _volumeChange = StartCoroutine(ChangeVolume(_minVolume));  
     }
 
     private IEnumerator ChangeVolume(float volume)
@@ -46,17 +42,22 @@ public class Alarm : MonoBehaviour
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, _changeRateVolume * Time.deltaTime);
             yield return null;
         }
+
+        if (_audioSource.volume == _minVolume)
+        {
+            StopCoroutine(_volumeChange);
+        }
     }
 
     private void OnEnable()
     {
-        SecuredTrigger.EventEnteredTrigger += UpVolume;
-        SecuredTrigger.EventExitedTrigger += DownVolume;
+        _eventTriggerObject.EventEnteredTrigger += UpVolume;
+        _eventTriggerObject.EventExitedTrigger += DownVolume;
     }
 
     private void OnDisable()
     {
-        SecuredTrigger.EventEnteredTrigger -= UpVolume;
-        SecuredTrigger.EventExitedTrigger -= DownVolume;
+        _eventTriggerObject.EventEnteredTrigger -= UpVolume;
+        _eventTriggerObject.EventExitedTrigger -= DownVolume;
     }
 }

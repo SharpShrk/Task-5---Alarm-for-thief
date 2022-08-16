@@ -5,32 +5,22 @@ public class Alarm : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _alarmClip;
+
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
     private float _changeRateVolume = 0.5f;
-    private Coroutine _runCorutine;
 
     public void UpVolume()
     {
         _audioSource.Play();
         _audioSource.volume = _minVolume;
 
-        if (_runCorutine != null)
-        {
-            StopCoroutine(_runCorutine);
-        }
-
-        _runCorutine = StartCoroutine(TurnUpVolume());
+        StartCoroutine(ChangeVolume(_maxVolume));
     }
 
     public void DownVolume()
     {
-        if (_runCorutine != null)
-        {
-            StopCoroutine(_runCorutine);
-        }
-
-        _runCorutine = StartCoroutine(TurnDownVolume());
+        StartCoroutine(ChangeVolume(_minVolume));
 
         if (_audioSource.volume == _minVolume)
         {
@@ -38,20 +28,11 @@ public class Alarm : MonoBehaviour
         }
     }
 
-    private IEnumerator TurnUpVolume()
+    private IEnumerator ChangeVolume(float volume)
     {
-        while (_audioSource.volume <= _maxVolume)
+        while (_audioSource.volume != volume)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _changeRateVolume * Time.deltaTime);
-            yield return new WaitForEndOfFrame();
-        }        
-    }
-
-    private IEnumerator TurnDownVolume()
-    {
-        while(_audioSource.volume >= _minVolume)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _changeRateVolume * Time.deltaTime);
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, _changeRateVolume * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }        
     }

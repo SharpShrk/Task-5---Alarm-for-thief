@@ -33,10 +33,10 @@ public class Alarm : MonoBehaviour
 
         _volumeChange = StartCoroutine(ChangeVolume(_minVolume));
 
-        if (_audioSource.volume == _minVolume)
+        /*if (_audioSource.volume == _minVolume)
         {
             StopCoroutine(_volumeChange);
-        }
+        }*/
     }
 
     private IEnumerator ChangeVolume(float volume)
@@ -44,19 +44,19 @@ public class Alarm : MonoBehaviour
         while (_audioSource.volume != volume)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, volume, _changeRateVolume * Time.deltaTime);
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
     private void OnEnable()
     {
-        SecuredTrigger.EnterTrigger += UpVolume;
-        SecuredTrigger.ExitTrigger += DownVolume;
+        SecuredTrigger.EventEnteredTrigger += UpVolume;
+        SecuredTrigger.EventExitedTrigger += DownVolume;
     }
 
     private void OnDisable()
     {
-        SecuredTrigger.EnterTrigger -= UpVolume;
-        SecuredTrigger.ExitTrigger -= DownVolume;
+        SecuredTrigger.EventEnteredTrigger -= UpVolume;
+        SecuredTrigger.EventExitedTrigger -= DownVolume;
     }
 }

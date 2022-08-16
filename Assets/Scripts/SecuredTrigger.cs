@@ -6,14 +6,14 @@ using System;
 public class SecuredTrigger : MonoBehaviour
 {
 
-    public static Action EnterTrigger;
-    public static Action ExitTrigger;
+    public Action EventEnteredTrigger;
+    public Action EventExitedTrigger;
 
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            EnterTrigger?.Invoke();
+            EventEnteredTrigger?.Invoke();
         }
     }
 
@@ -21,7 +21,7 @@ public class SecuredTrigger : MonoBehaviour
     {
         if (collision.TryGetComponent<Player>(out Player player))
         {
-            ExitTrigger?.Invoke();
+            EventExitedTrigger?.Invoke();
         }
     }
 }

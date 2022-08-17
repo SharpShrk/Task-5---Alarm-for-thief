@@ -6,8 +6,8 @@ using System;
 public class SecuredTrigger : MonoBehaviour
 {
 
-    public Action EventEnteredTrigger;
-    public Action EventExitedTrigger;
+    public event Action EventEnteredTrigger;
+    public event Action EventExitedTrigger;
 
     private void OnTriggerEnter(Collider collision)
     {

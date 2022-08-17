@@ -5,7 +5,9 @@
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float _speed;
+
     private Rigidbody _rigidbody;
+    private int _indexDirection = -1;
 
     private void Start()
     {
@@ -25,6 +27,6 @@ public class Movement : MonoBehaviour
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-        _rigidbody.AddForce(movement * _speed * -1);
+        _rigidbody.AddForce(movement * _speed * _indexDirection);
     }
 }

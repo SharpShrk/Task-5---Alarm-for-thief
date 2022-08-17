@@ -558,6 +558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 1576444219}
   _alarmClip: {fileID: 8300000, guid: 0eede02278aaa994082d5880610c1d90, type: 3}
+  _eventTriggerObject: {fileID: 1700908439}
 --- !u!82 &1576444219
 AudioSource:
   m_ObjectHideFlags: 0
@@ -732,6 +733,7 @@ GameObject:
   - component: {fileID: 1700908435}
   - component: {fileID: 1700908439}
   - component: {fileID: 1700908440}
+  - component: {fileID: 1700908441}
   m_Layer: 0
   m_Name: Secured Territory
   m_TagString: Untagged
@@ -830,7 +832,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2579545ae63f92e47a337ac1b4d3285e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _signaling: {fileID: 1576444216}
 --- !u!114 &1700908440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -845,3 +846,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 0}
   _alarmClip: {fileID: 0}
+  _eventTriggerObject: {fileID: 0}
+--- !u!114 &1700908441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700908434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c822fd965b780c34383bced10957f82a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

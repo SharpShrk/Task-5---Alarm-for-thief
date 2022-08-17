@@ -12,6 +12,18 @@ public class Alarm : MonoBehaviour
     private float _changeRateVolume = 0.5f;
     private Coroutine _volumeChange;
 
+    private void OnEnable()
+    {
+        _eventTriggerObject.EventEnteredTrigger += UpVolume;
+        _eventTriggerObject.EventExitedTrigger += DownVolume;
+    }
+
+    private void OnDisable()
+    {
+        _eventTriggerObject.EventEnteredTrigger -= UpVolume;
+        _eventTriggerObject.EventExitedTrigger -= DownVolume;
+    }
+
     public void UpVolume()
     {
         if (_volumeChange != null)
@@ -47,17 +59,5 @@ public class Alarm : MonoBehaviour
         {
             StopCoroutine(_volumeChange);
         }
-    }
-
-    private void OnEnable()
-    {
-        _eventTriggerObject.EventEnteredTrigger += UpVolume;
-        _eventTriggerObject.EventExitedTrigger += DownVolume;
-    }
-
-    private void OnDisable()
-    {
-        _eventTriggerObject.EventEnteredTrigger -= UpVolume;
-        _eventTriggerObject.EventExitedTrigger -= DownVolume;
     }
 }
